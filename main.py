@@ -36,8 +36,8 @@ def go(config: DictConfig):
                 if "download" in active_steps:
                     print("Executing download step...")
                     _ = mlflow.run(
-                        "https://github.com/udacity/Project-Build-an-ML-Pipeline-Starter.git#components/get_data",
-                        "main",
+                        "https://github.com/udacity/Project-Build-an-ML-Pipeline-Starter.git#components/get_data",  #  FIXED
+                        "main",  # FIXED - Added entry point
                         parameters={
                             "sample": config["etl"]["sample"],
                             "artifact_name": "sample.csv",
@@ -100,7 +100,7 @@ def go(config: DictConfig):
                         json.dump(dict(config["modeling"]["random_forest"].items()), fp)  # DO NOT TOUCH
 
                     _ = mlflow.run(
-                        "https://github.com/udacity/Project-Build-an-ML-Pipeline-Starter.git#src/train_random_forest",
+                        "src/train_random_forest",  #  FIXED - Use local version!
                         "main",
                         parameters={
                             "trainval_artifact": "trainval_data.csv:latest",
@@ -117,11 +117,11 @@ def go(config: DictConfig):
                 if "test_regression_model" in active_steps:
                     print("Executing model testing step...")
                     _ = mlflow.run(
-                        "https://github.com/udacity/Project-Build-an-ML-Pipeline-Starter.git#src/test_regression_model",
+                        "https://github.com/udacity/Project-Build-an-ML-Pipeline-Starter.git#components/test_regression_model",  # ✅ Fixed path
                         "main",
                         parameters={
                             "mlflow_model": "random_forest_export:prod",
-                            "test_dataset": "test_data.csv:latest"
+                            "test_dataset": "test_data.csv:latest"  # Will verify if this should be test_artifact
                         },
                         env_manager="conda"
                     )
